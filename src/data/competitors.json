@@ -1,0 +1,32 @@
+[
+  {
+    "id": "ours",
+    "name": "Our Flagship Residence",
+    "densityPerAcre": 300,
+    "pricePerSqft": 750,
+    "maintenanceFee": 0.35,
+    "distanceToMRTKm": 0.5,
+    "parkingPerUnit": 2,
+    "remarks": "Low density, premium facilities"
+  },
+  {
+    "id": "proj_b",
+    "name": "Project B",
+    "densityPerAcre": 1200,
+    "pricePerSqft": 680,
+    "maintenanceFee": 0.30,
+    "distanceToMRTKm": 1.8,
+    "parkingPerUnit": 1,
+    "remarks": "Cheaper but crowded"
+  },
+  {
+    "id": "proj_c",
+    "name": "Project C",
+    "densityPerAcre": 900,
+    "pricePerSqft": 700,
+    "maintenanceFee": 0.28,
+    "distanceToMRTKm": 2.5,
+    "parkingPerUnit": 1,
+    "remarks": "Mid-range option"
+  }
+]
