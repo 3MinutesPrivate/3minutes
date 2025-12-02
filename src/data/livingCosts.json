@@ -1,0 +1,30 @@
+[
+  {
+    "id": "urban_small",
+    "label": "Urban – Couple (no children)",
+    "locationType": "urban",
+    "householdSize": 2,
+    "minNDI": 2500
+  },
+  {
+    "id": "urban_family",
+    "label": "Urban – Family (2 children)",
+    "locationType": "urban",
+    "householdSize": 4,
+    "minNDI": 3500
+  },
+  {
+    "id": "rural_small",
+    "label": "Rural – Couple (no children)",
+    "locationType": "rural",
+    "householdSize": 2,
+    "minNDI": 1500
+  },
+  {
+    "id": "rural_family",
+    "label": "Rural – Family (2 children)",
+    "locationType": "rural",
+    "householdSize": 4,
+    "minNDI": 2500
+  }
+]
