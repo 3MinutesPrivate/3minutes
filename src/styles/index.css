@@ -2,7 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter",
-    "Roboto", sans-serif;
+  @apply bg-slate-950 text-slate-50 font-sans;
+}
+
+.app-card {
+  @apply bg-slate-900/80 border border-slate-800 rounded-xl p-5 shadow-soft;
+}
+
+.app-card-header {
+  @apply flex items-center justify-between mb-3;
+}
+
+.app-card-title {
+  @apply text-sm font-semibold tracking-wide text-slate-100 uppercase;
+}
+
+.app-card-subtitle {
+  @apply text-xs text-slate-400;
+}
+
+.app-input {
+  @apply w-full px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-slate-50 text-sm focus:outline-none focus:ring-2 focus:ring-emerald focus:border-emerald;
+}
+
+.app-label {
+  @apply block text-xs font-medium text-slate-300 mb-1;
+}
+
+.app-badge {
+  @apply inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  @apply bg-slate-900;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  @apply bg-slate-700 rounded-full;
 }
