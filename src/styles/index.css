@@ -9,17 +9,10 @@ body {
   /* 深紫基底，接近 Finzo 风格 */
   background-color: #050014;
 
-  /* 顶部紫色光晕 + 渐变 + 细竖纹 */
+  /* 顶部紫色光晕 + 渐变 */
   background-image:
-    radial-gradient(circle at 0% 0%, rgba(124, 58, 237, 0.45), transparent 55%),
-    radial-gradient(circle at 100% 0%, rgba(244, 114, 182, 0.4), transparent 55%),
-    linear-gradient(to bottom, #020617 0%, #020617 40%, #000000 100%),
-    repeating-linear-gradient(
-      to right,
-      rgba(148, 163, 184, 0.08) 0px,
-      rgba(148, 163, 184, 0.08) 1px,
-      transparent 1px,
-      transparent 16px
-    );
+    radial-gradient(circle at 0 0, rgba(124, 58, 237, 0.45), transparent 55%),
+    radial-gradient(circle at 100% 0, rgba(244, 114, 182, 0.4), transparent 55%),
+    linear-gradient(to bottom, #020617 0%, #020617 40%, #000000 100%);
   background-attachment: fixed;
 }
