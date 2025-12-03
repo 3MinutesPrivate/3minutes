@@ -113,7 +113,11 @@ function OnboardingForm({ initialData, onComplete }) {
 
         <button
           type="submit"
-          className="mt-2 inline-flex w-full items-center justify-center rounded-lg bg-emerald-500 px-3 py-2 text-sm font-semibold text-slate-900 shadow hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/70 focus:ring-offset-2 focus:ring-offset-slate-950"
+          className="mt-2 inline-flex w-full items-center justify-center rounded-full
+             bg-gradient-to-r from-amberBrand via-limeBrand to-violetBrand
+             px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg
+             hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-violetBrand/70
+             focus:ring-offset-2 focus:ring-offset-slate-950"
         >
           Enter 3Minutes
         </button>
