@@ -29,7 +29,12 @@ function Hub() {
           highlight={mode === "customer"}
           onClick={() => setMode("customer")}
         >
-          <p className="text-[11px] text-slate-400">
+          <div className="flex items-start gap-3 text-[11px] text-slate-300">
+    <div className="mt-0.5 h-7 w-7 flex items-center justify-center rounded-full
+                    bg-violetBrand/30 text-white text-xs shadow-inner">
+      🧮
+    </div>
+    <p>
             Show property price, downpayment, instalment and full amortisation
             schedule in one flow.
           </p>
@@ -41,7 +46,12 @@ function Hub() {
           highlight={mode === "agent"}
           onClick={() => setMode("agent")}
         >
-          <p className="text-[11px] text-slate-400">
+<div className="flex items-start gap-3 text-[11px] text-slate-300">
+    <div className="mt-0.5 h-7 w-7 flex items-center justify-center rounded-full
+                    bg-violetBrand/30 text-white text-xs shadow-inner">
+      🧮
+    </div>
+    <p>
             Combine quick quotation, entry costs and instant DSR traffic light
             to pre-screen buyers.
           </p>
@@ -52,7 +62,12 @@ function Hub() {
           subtitle="Smart checklist by customer persona."
           onClick={() => setMode("agent")}
         >
-          <p className="text-[11px] text-slate-400">
+          <div className="flex items-start gap-3 text-[11px] text-slate-300">
+    <div className="mt-0.5 h-7 w-7 flex items-center justify-center rounded-full
+                    bg-violetBrand/30 text-white text-xs shadow-inner">
+      🧮
+    </div>
+    <p>
             Use the Helper Tools module (Agent View) to avoid missing income,
             tax and supporting documents at submission.
           </p>
@@ -62,7 +77,12 @@ function Hub() {
           title="Community Rates"
           subtitle="Hive Mind default interest."
         >
-          <p className="text-[11px] text-slate-400">
+          <div className="flex items-start gap-3 text-[11px] text-slate-300">
+    <div className="mt-0.5 h-7 w-7 flex items-center justify-center rounded-full
+                    bg-violetBrand/30 text-white text-xs shadow-inner">
+      🧮
+    </div>
+    <p>
             Current default home loan rate:{" "}
             <span className="font-semibold text-emerald-400">
               {formatPercent((defaults.interestRate || 4.1))}
