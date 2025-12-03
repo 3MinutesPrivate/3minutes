@@ -9,25 +9,23 @@ import CustomerView from "./components/modeA/CustomerView.jsx";
 import AgentView from "./components/modeB/AgentView.jsx";
 import BankerView from "./components/modeC/BankerView.jsx";
 
-import OnboardingForm from "./components/onboarding/OnboardingForm.jsx";
-
 function App() {
   const { user, setUser, mode } = useAppContext();
 
-  const handleOnboardingComplete = React.useCallback(
-    (data) => {
-      setUser(data);
-    },
-    [setUser]
-  );
+  // DEV 模式：自动注入一个测试用户，跳过 Onboarding
+  React.useEffect(() => {
+    if (!user) {
+      setUser({
+        name: "Dev Tester",
+        email: "dev@example.com",
+        phone: "+60149428924",
+      });
+    }
+  }, [user, setUser]);
 
-  // 还没注册信息时，先显示 Onboarding
+  // 首帧 user 还没注入时，先不渲染任何内容，避免闪一下 Onboarding
   if (!user) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
-        <OnboardingForm initialData={user} onComplete={handleOnboardingComplete} />
-      </div>
-    );
+    return null;
   }
 
   let view = null;
