@@ -12,7 +12,7 @@ import BankerView from "./components/modeC/BankerView.jsx";
 function App() {
   const { user, setUser, mode } = useAppContext();
 
-  // DEV 模式：自动注入一个测试用户，跳过 Onboarding
+  // DEV 模式：自动注入测试用户，跳过 Onboarding
   React.useEffect(() => {
     if (!user) {
       setUser({
@@ -23,8 +23,18 @@ function App() {
     }
   }, [user, setUser]);
 
-  // 首帧 user 还没注入时，先不渲染任何内容，避免闪一下 Onboarding
+  // Hub 是否折叠：Customer 默认展开，其它模式默认收起
+  const [hubCollapsed, setHubCollapsed] = React.useState(
+    mode !== "customer"
+  );
+
+  // 切换视角时重置默认值
+  React.useEffect(() => {
+    setHubCollapsed(mode !== "customer");
+  }, [mode]);
+
   if (!user) {
+    // 首帧注入用户时不渲染，避免闪现
     return null;
   }
 
@@ -36,8 +46,27 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-50">
       <Header />
-      <main className="mx-auto mt-4 w-full max-w-6xl px-4 pb-6 space-y-6">
-        <Hub />
+      <main className="mx-auto mt-4 w-full max-w-6xl px-4 pb-6 space-y-4">
+        {/* Hub 折叠控制条 */}
+        <div className="flex items-center justify-between text-[11px] text-slate-400">
+          <span>
+            {hubCollapsed
+              ? "Overview is hidden. Tap to show the 3M tool hub."
+              : "Overview is visible. Tap to hide if you need more space."}
+          </span>
+          <button
+            type="button"
+            onClick={() => setHubCollapsed((v) => !v)}
+            className="inline-flex items-center rounded-full border border-slate-700/80 bg-slate-900/80 px-3 py-1 text-[11px] font-medium text-slate-100 hover:border-emerald-400/80"
+          >
+            {hubCollapsed ? "Show Overview" : "Hide Overview"}
+          </button>
+        </div>
+
+        {/* Hub 总览区（可折叠） */}
+        {!hubCollapsed && <Hub />}
+
+        {/* 各模式主视图 */}
         {view}
       </main>
       <Footer />
