@@ -1,61 +1,50 @@
-import React from 'react';
-import { AppProvider, useAppContext } from './state/AppContext.jsx';
-import { HandbookProvider } from './state/HandbookContext.jsx';
-import Layout from './components/layout/Layout.jsx';
-import Hub from './components/hub/Hub.jsx';
-import CustomerView from './components/modeA/CustomerView.jsx';
-import AgentView from './components/modeB/AgentView.jsx';
-import BankerView from './components/modeC/BankerView.jsx';
-import Onboarding from './components/onboarding/Onboarding.jsx';
-import { MODES } from './lib/constants.js';
+import React from "react";
+import { useAppContext } from "./context/AppContext.jsx";
 
-function AppContent() {
-  const { user, mode, loadingDefaults } = useAppContext();
+import Header from "./components/layout/Header.jsx";
+import Footer from "./components/layout/Footer.jsx";
+import Hub from "./components/layout/Hub.jsx";
 
-  if (loadingDefaults) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-50">
-        <div className="flex flex-col items-center gap-2">
-          <div className="h-10 w-10 border-4 border-emerald border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-slate-300">Initializing 3Minutes engine…</p>
-        </div>
-      </div>
-    );
-  }
+import CustomerView from "./components/modeA/CustomerView.jsx";
+import AgentView from "./components/modeB/AgentView.jsx";
+import BankerView from "./components/modeC/BankerView.jsx";
 
+import OnboardingForm from "./components/onboarding/OnboardingForm.jsx";
+
+function App() {
+  const { user, setUser, mode } = useAppContext();
+
+  const handleOnboardingComplete = React.useCallback(
+    (data) => {
+      setUser(data);
+    },
+    [setUser]
+  );
+
+  // 还没注册信息时，先显示 Onboarding
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-50">
-        <Onboarding />
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
+        <OnboardingForm initialData={user} onComplete={handleOnboardingComplete} />
       </div>
     );
   }
 
-  let ModeView = null;
-  if (mode === MODES.CUSTOMER) {
-    ModeView = <CustomerView />;
-  } else if (mode === MODES.AGENT) {
-    ModeView = <AgentView />;
-  } else if (mode === MODES.BANKER) {
-    ModeView = <BankerView />;
-  }
+  let view = null;
+  if (mode === "agent") view = <AgentView />;
+  else if (mode === "banker") view = <BankerView />;
+  else view = <CustomerView />;
 
   return (
-    <Layout>
-      <div className="max-w-6xl mx-auto px-4 py-6 space-y-8">
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-50">
+      <Header />
+      <main className="mx-auto mt-4 w-full max-w-6xl px-4 pb-6 space-y-6">
         <Hub />
-        {ModeView}
-      </div>
-    </Layout>
+        {view}
+      </main>
+      <Footer />
+    </div>
   );
 }
 
-export default function App() {
-  return (
-    <HandbookProvider>
-      <AppProvider>
-        <AppContent />
-      </AppProvider>
-    </HandbookProvider>
-  );
-}
+export default App;
