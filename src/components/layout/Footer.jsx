@@ -1,18 +1,47 @@
-import React from 'react';
-import { CONTACT, LEGAL } from '../../lib/constants.js';
+import React from "react";
 
-export default function Footer() {
+function Footer() {
   return (
-    <footer className="border-t border-slate-800 bg-slate-950 mt-8">
-      <div className="max-w-6xl mx-auto px-4 py-4 text-[11px] text-slate-400 space-y-2">
-        <div className="flex flex-wrap gap-x-4 gap-y-1">
-          <span>📍 {CONTACT.address}</span>
-          <span>☎ {CONTACT.phone}</span>
-          <span>✉ {CONTACT.email}</span>
+    <footer className="mt-8 border-t border-slate-800/80 bg-slate-950/95">
+      <div className="mx-auto max-w-6xl px-4 py-4 text-[11px] text-slate-400 space-y-2">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <div className="font-semibold text-slate-200">
+              3Minutes Fintech
+            </div>
+            <div>Level 12, Midtown Co-Working, Jalan Tun Razak, 50400 Kuala Lumpur</div>
+            <div>Landline: +603-2710 0000</div>
+            <div>Email: support@3minutes.com</div>
+          </div>
+          <div className="max-w-md">
+            <div className="font-semibold text-slate-200">
+              Disclaimer
+            </div>
+            <p>
+              All calculations and simulations are for reference only and are
+              subject to final bank approval and official product terms.
+              3Minutes is a fintech tool, not a bank, and does not provide
+              guaranteed approval or credit decisions.
+            </p>
+          </div>
         </div>
-        <div>{LEGAL.pdpaNotice}</div>
-        <div className="text-[10px] text-slate-500">{LEGAL.disclaimer}</div>
+
+        <div className="flex flex-wrap items-start justify-between gap-4 pt-2 border-t border-slate-800/80">
+          <p>
+            PDPA Notice: Data collected in this tool is used for assessment and
+            illustration purposes only. We adhere to PDPA standards and do not
+            sell personal data to third parties.
+          </p>
+          <p className="text-right text-[10px] text-slate-500">
+            Vocabulary policy: we use terms like{" "}
+            <span className="font-semibold">“high approval probability”</span>{" "}
+            and <span className="font-semibold">“max margin financing”</span>{" "}
+            instead of absolute promises.
+          </p>
+        </div>
       </div>
     </footer>
   );
 }
+
+export default Footer;
