@@ -1,36 +1,43 @@
-import React from 'react';
-import { BRAND } from '../../lib/constants.js';
-import ModeSwitcher from './ModeSwitcher.jsx';
-import { useAppContext } from '../../state/AppContext.jsx';
+import React from "react";
+import { useAppContext } from "../../context/AppContext";
+import PerspectiveSwitcher from "./PerspectiveSwitcher";
+import logo from "../../assets/logo.svg";
 
-export default function Header() {
+function Header() {
   const { user } = useAppContext();
 
   return (
-    <header className="border-b border-slate-800 bg-slate-950/90 backdrop-blur sticky top-0 z-30">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+    <header className="border-b border-slate-800/80 bg-slate-950/95 backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-lg bg-emerald flex items-center justify-center text-slate-950 font-bold text-lg">
-            3M
-          </div>
+          <img
+            src={logo}
+            alt="3Minutes"
+            className="h-7 w-7 flex-shrink-0"
+          />
           <div>
-            <div className="text-sm font-semibold tracking-wide text-slate-100">
-              {BRAND.name}
+            <div className="text-sm font-semibold tracking-tight text-slate-50">
+              3Minutes
             </div>
-            <div className="text-[11px] text-slate-400">{BRAND.tagline}</div>
+            <div className="text-[11px] text-emerald-400">
+              Mortgage Intelligence in 3 Minutes.
+            </div>
           </div>
         </div>
-
         <div className="flex items-center gap-4">
           {user && (
-            <div className="hidden sm:flex flex-col items-end text-right">
-              <div className="text-xs text-slate-200 font-medium">{user.name}</div>
-              <div className="text-[11px] text-slate-400">{user.phone}</div>
+            <div className="hidden text-right text-[11px] text-slate-400 sm:block">
+              <div className="font-medium text-slate-200">
+                {user.name || "Guest"}
+              </div>
+              {user.phone && <div>WhatsApp: {user.phone}</div>}
             </div>
           )}
-          <ModeSwitcher />
+          <PerspectiveSwitcher />
         </div>
       </div>
     </header>
   );
 }
+
+export default Header;
