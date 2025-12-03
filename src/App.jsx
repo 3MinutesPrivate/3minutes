@@ -9,16 +9,6 @@ import CustomerView from "./components/modeA/CustomerView.jsx";
 import AgentView from "./components/modeB/AgentView.jsx";
 import BankerView from "./components/modeC/BankerView.jsx";
 
-// Finzo 风格紫色背景（放在组件外，避免每次 render 都新建对象）
-const appBackgroundStyle = {
-  backgroundColor: "#050014",
-  backgroundImage:
-    "radial-gradient(circle at 0 0, rgba(124,58,237,0.45), transparent 55%), " +
-    "radial-gradient(circle at 100% 0, rgba(244,114,182,0.40), transparent 55%), " +
-    "linear-gradient(to bottom, #020617 0%, #020617 40%, #000000 100%)",
-  backgroundAttachment: "fixed",
-};
-
 function App() {
   const { user, setUser, mode } = useAppContext();
 
@@ -54,10 +44,7 @@ function App() {
   else view = <CustomerView />;
 
   return (
-    <div
-      className="min-h-screen flex flex-col text-slate-50"
-      style={appBackgroundStyle}
-    >
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-50">
       <Header />
       <main className="mx-auto mt-4 w-full max-w-6xl px-4 pb-6 space-y-4">
         {/* Hub 折叠控制条 */}
