@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useAuthStore } from "./platform/auth/authStore.js";
+import { useAuthStore } from "./platform/auth/authStore.jsx";
 import { useAppContext } from "./context/AppContext.jsx";
 
 import AppShell from "./platform/layout/AppShell.jsx";
