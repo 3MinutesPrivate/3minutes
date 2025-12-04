@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppContext } from "../../context/AppContext";
+import { useAppContext } from "../../context/AppContext.jsx";
 
 const MODES = [
   { id: "customer", label: "Customer" },
@@ -7,6 +7,11 @@ const MODES = [
   { id: "banker", label: "Banker" },
 ];
 
+/**
+ * 顶部模式切换器，用于显示当前 Lens，并允许用户切换。
+ * - 当前模式按钮“亮灯”：绿色背景 + 小灯泡图标
+ * - 点击会更新 AppContext.mode，UnifiedCalculator 会同步 activeLens
+ */
 function PerspectiveSwitcher() {
   const { mode, setMode } = useAppContext();
 
@@ -19,13 +24,18 @@ function PerspectiveSwitcher() {
             key={m.id}
             type="button"
             onClick={() => setMode(m.id)}
-            className={`mx-0.5 rounded-full px-2.5 py-1 transition ${
+            className={`mx-0.5 rounded-full px-2.5 py-1 flex items-center gap-1 transition ${
               active
                 ? "bg-emerald-500 text-slate-900 shadow-sm"
                 : "text-slate-300 hover:bg-slate-800/80 hover:text-slate-50"
             }`}
           >
-            {m.label}
+            {active && (
+              <span className="text-[10px]" aria-hidden="true">
+                💡
+              </span>
+            )}
+            <span>{m.label}</span>
           </button>
         );
       })}
