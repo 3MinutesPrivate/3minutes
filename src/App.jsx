@@ -1,76 +1,58 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useAuthStore } from "./platform/auth/authStore.js";
 import { useAppContext } from "./context/AppContext.jsx";
 
-import Header from "./components/layout/Header.jsx";
-import Footer from "./components/layout/Footer.jsx";
-import Hub from "./components/layout/Hub.jsx";
+import AppShell from "./platform/layout/AppShell.jsx";
+import LoginScreen from "./platform/auth/LoginScreen.jsx";
+import UnifiedCalculator from "./features/loan_calculator/presentation/UnifiedCalculator.jsx";
 
-import CustomerView from "./components/modeA/CustomerView.jsx";
-import AgentView from "./components/modeB/AgentView.jsx";
-import BankerView from "./components/modeC/BankerView.jsx";
-
+/**
+ * 新版 App：
+ * - 解析 URL ?code= 邀请码
+ * - 从 AuthStore 读取 currentUser
+ * - 同步 basic user 信息到旧的 AppContext（保证 Header/Watermark 继续工作）
+ * - 未登录时渲染 LoginScreen；已登录则渲染 Mother Base + UnifiedCalculator
+ */
 function App() {
-  const { user, setUser, mode } = useAppContext();
+  const { currentUser, setInviteCode } = useAuthStore();
+  const { setUser } = useAppContext();
 
-  // DEV 模式：自动注入测试用户，跳过 Onboarding
-  React.useEffect(() => {
-    if (!user) {
-      setUser({
-        name: "Dev Tester",
-        email: "dev@example.com",
-        phone: "+60149428924",
-      });
+  // 解析 URL 邀请码
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("code");
+      if (code) {
+        window.sessionStorage.setItem("inviteCode", code);
+        setInviteCode && setInviteCode(code);
+      }
+    } catch {
+      // ignore
     }
-  }, [user, setUser]);
+  }, [setInviteCode]);
 
-  // Hub 是否折叠：Customer 默认展开，其它模式默认收起
-  const [hubCollapsed, setHubCollapsed] = React.useState(
-    mode !== "customer"
-  );
+  // 将 AuthStore 的用户同步到旧 AppContext（供 Header / Watermark 使用）
+  useEffect(() => {
+    if (!setUser) return;
+    if (!currentUser) {
+      setUser(null);
+      return;
+    }
+    setUser({
+      name: currentUser.name || "",
+      email: currentUser.email || "",
+      phone: currentUser.phone || "",
+    });
+  }, [currentUser, setUser]);
 
-  // 切换视角时重置默认值
-  React.useEffect(() => {
-    setHubCollapsed(mode !== "customer");
-  }, [mode]);
-
-  if (!user) {
-    // 首帧注入用户时不渲染，避免闪现
-    return null;
+  if (!currentUser) {
+    return <LoginScreen />;
   }
 
-  let view = null;
-  if (mode === "agent") view = <AgentView />;
-  else if (mode === "banker") view = <BankerView />;
-  else view = <CustomerView />;
-
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-50">
-      <Header />
-      <main className="mx-auto mt-4 w-full max-w-6xl px-4 pb-6 space-y-4">
-        {/* Hub 折叠控制条 */}
-        <div className="flex items-center justify-between text-[11px] text-slate-400">
-          <span>
-            {hubCollapsed
-              ? "Overview is hidden. Tap to show the 3M tool hub."
-              : "Overview is visible. Tap to hide if you need more space."}
-          </span>
-          <button
-            type="button"
-            onClick={() => setHubCollapsed((v) => !v)}
-            className="inline-flex items-center rounded-full border border-slate-700/80 bg-slate-900/80 px-3 py-1 text-[11px] font-medium text-slate-100 hover:border-emerald-400/80"
-          >
-            {hubCollapsed ? "Show Overview" : "Hide Overview"}
-          </button>
-        </div>
-
-        {/* Hub 总览区（可折叠） */}
-        {!hubCollapsed && <Hub />}
-
-        {/* 各模式主视图 */}
-        {view}
-      </main>
-      <Footer />
-    </div>
+    <AppShell>
+      <UnifiedCalculator currentUser={currentUser} />
+    </AppShell>
   );
 }
 
