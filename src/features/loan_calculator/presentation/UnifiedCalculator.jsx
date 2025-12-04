@@ -8,13 +8,10 @@ import {
 import CustomerView from "./views/CustomerView.jsx";
 import AgentView from "./views/AgentView.jsx";
 import BankerView from "./views/BankerView.jsx";
-
-// FAB 按钮组件（稍后会在 platform/layout/FabLensSwitcher.jsx 中实现）
 import FabLensSwitcher from "../../../platform/layout/FabLensSwitcher.jsx";
 
 /**
- * 透镜元数据：用于 FAB 上显示的标签 & 说明文案。
- * 如需改文案，只改这里即可。
+ * 透镜元数据：用于 FAB 上展示 label / 描述。
  */
 const LENS_META = {
   [LENSES.CUSTOMER]: {
@@ -37,26 +34,18 @@ const LENS_META = {
 /**
  * UnifiedCalculator
  *
- * 统一的贷款计算器容器，根据「角色」+「当前透镜」决定渲染哪个视图。
+ * 统一贷款计算器入口，根据「当前用户角色」+「activeLens」渲染不同视图。
  *
  * Props:
- *  - currentUser: {
- *      id?: string;
- *      name?: string;
- *      email?: string;
- *      phone?: string;
- *      role?: "customer" | "agent" | "banker" | "boss";
- *    }
- *  - initialLens?: "customer" | "agent" | "banker" （可选，覆盖默认 lens）
+ *  - currentUser: { id?, name?, email?, phone?, role? }
+ *  - initialLens?: "customer" | "agent" | "banker"  // 可选
  */
 function UnifiedCalculator({ currentUser, initialLens }) {
   const role = normalizeRole(currentUser?.role || "customer");
   const roleConfig = getRoleConfig(role);
-
-  // allowedLenses: 针对当前角色的白名单
   const allowedLenses = roleConfig.allowedLenses || [LENSES.CUSTOMER];
 
-  // 初始透镜：优先使用外部传入的 initialLens（若在白名单内），否则用角色默认。
+  // 计算初始 lens：如果外部传入且在白名单内则使用，否则用角色默认
   const resolvedInitialLens = React.useMemo(() => {
     if (initialLens && allowedLenses.includes(initialLens)) {
       return initialLens;
@@ -66,17 +55,16 @@ function UnifiedCalculator({ currentUser, initialLens }) {
 
   const [activeLens, setActiveLens] = React.useState(resolvedInitialLens);
 
-  // 当角色变化或 allowedLenses 变化时，确保 activeLens 仍然合法
+  // 当 allowedLenses 或 roleConfig 改变时，保证 activeLens 仍然合法
   React.useEffect(() => {
     if (!allowedLenses.includes(activeLens)) {
       setActiveLens(roleConfig.defaultLens);
     }
   }, [allowedLenses, activeLens, roleConfig.defaultLens]);
 
-  // 仅当该角色有超过 1 个 lens 时才显示 FAB
   const canSwitchLens = allowedLenses.length > 1;
 
-  // 当前透镜对应的视图组件
+  // 视图选择
   let view = null;
   switch (activeLens) {
     case LENSES.AGENT:
@@ -91,7 +79,6 @@ function UnifiedCalculator({ currentUser, initialLens }) {
       break;
   }
 
-  // 把 allowedLenses 转换为 FAB 可用的选项：[{id,label,description}, ...]
   const lensOptions = React.useMemo(
     () =>
       allowedLenses.map((id) => {
@@ -103,10 +90,8 @@ function UnifiedCalculator({ currentUser, initialLens }) {
 
   return (
     <div className="relative">
-      {/* 主视图区域（Customer / Agent / Banker） */}
       {view}
 
-      {/* 仅 Agent / Banker / Boss 等高权限角色显示 FAB */}
       {canSwitchLens && (
         <FabLensSwitcher
           activeLens={activeLens}
