@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { useAuthStore } from "./authStore";
+import { useAuthStore } from "./authStore.jsx";
 import { ROLES } from "../../features/loan_calculator/logic/roles.js";
 import Card from "../../components/common/Card.jsx";
 import NumberInput from "../../components/common/NumberInput.jsx";
 
+// 邀请码常量：正式环境你可以自己换成更复杂的
 const INVITE_CODES = {
   [ROLES.AGENT]: "BANKER_GENERATED_CODE",
   [ROLES.BANKER]: "BOSS_GENERATED_CODE",
+  [ROLES.BOSS]: "3M_SUPER_BOSS", // Boss 专用 master code
 };
 
 function LoginScreen() {
@@ -20,7 +22,9 @@ function LoginScreen() {
   const [error, setError] = useState("");
 
   const needsInvite =
-    role === ROLES.AGENT || role === ROLES.BANKER;
+    role === ROLES.AGENT ||
+    role === ROLES.BANKER ||
+    role === ROLES.BOSS;
 
   const validateInvite = () => {
     if (!needsInvite) return true;
@@ -45,11 +49,20 @@ function LoginScreen() {
       return;
     }
     if (!validateInvite()) {
-      setError(
-        role === ROLES.AGENT
-          ? "Invalid invite code for Agent. Please obtain it from a banker."
-          : "Invalid invite code for Banker. Only boss-generated codes are accepted."
-      );
+      let msg;
+      if (role === ROLES.AGENT) {
+        msg =
+          "Invalid invite code for Agent. Please obtain it from a banker.";
+      } else if (role === ROLES.BANKER) {
+        msg =
+          "Invalid invite code for Banker. Only boss-generated codes are accepted.";
+      } else if (role === ROLES.BOSS) {
+        msg =
+          "Invalid boss code. This access is reserved for the system owner only.";
+      } else {
+        msg = "Invalid invite code.";
+      }
+      setError(msg);
       return;
     }
 
@@ -59,6 +72,14 @@ function LoginScreen() {
       phone: phone.trim(),
       role,
     });
+  };
+
+  const roleLabel = (r) => {
+    if (r === ROLES.CUSTOMER) return "Customer";
+    if (r === ROLES.AGENT) return "Agent";
+    if (r === ROLES.BANKER) return "Banker";
+    if (r === ROLES.BOSS) return "Boss";
+    return r;
   };
 
   return (
@@ -79,29 +100,25 @@ function LoginScreen() {
               I am logging in as:
             </span>
             <div className="inline-flex rounded-full bg-slate-900/80 border border-slate-700/80 p-0.5">
-              {[ROLES.CUSTOMER, ROLES.AGENT, ROLES.BANKER].map((r) => {
-                const label =
-                  r === ROLES.CUSTOMER
-                    ? "Customer"
-                    : r === ROLES.AGENT
-                    ? "Agent"
-                    : "Banker";
-                const active = role === r;
-                return (
-                  <button
-                    key={r}
-                    type="button"
-                    onClick={() => setRole(r)}
-                    className={`mx-0.5 rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
-                      active
-                        ? "bg-emerald-500 text-slate-900"
-                        : "text-slate-300 hover:bg-slate-800/80"
-                    }`}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
+              {[ROLES.CUSTOMER, ROLES.AGENT, ROLES.BANKER, ROLES.BOSS].map(
+                (r) => {
+                  const active = role === r;
+                  return (
+                    <button
+                      key={r}
+                      type="button"
+                      onClick={() => setRole(r)}
+                      className={`mx-0.5 rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
+                        active
+                          ? "bg-emerald-500 text-slate-900"
+                          : "text-slate-300 hover:bg-slate-800/80"
+                      }`}
+                    >
+                      {roleLabel(r)}
+                    </button>
+                  );
+                }
+              )}
             </div>
           </div>
 
@@ -173,13 +190,17 @@ function LoginScreen() {
                 placeholder={
                   role === ROLES.AGENT
                     ? "Code from banker"
-                    : "Code from boss"
+                    : role === ROLES.BANKER
+                    ? "Code from boss"
+                    : "Boss master code"
                 }
               />
               <p className="mt-1 text-[11px] text-slate-400">
                 {role === ROLES.AGENT
                   ? "Agents require a banker-generated invite code."
-                  : "Bankers require a boss-generated invite code."}
+                  : role === ROLES.BANKER
+                  ? "Bankers require a boss-generated invite code."
+                  : "Boss access is restricted. Keep this code secret."}
               </p>
             </div>
           )}
