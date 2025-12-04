@@ -4,8 +4,8 @@ import IncomeRecognition from "../components/banker/IncomeRecognition.jsx";
 import CommitmentStack from "../components/banker/CommitmentStack.jsx";
 import HandbookSettings from "../components/banker/HandbookSettings.jsx";
 import SimulationMitigation from "../components/banker/SimulationMitigation.jsx";
-import WatermarkOverlay from "../../../../../components/layout/WatermarkOverlay.jsx";
-import Card from "../../../../../components/common/Card.jsx";
+import WatermarkOverlay from "../../../../components/layout/WatermarkOverlay.jsx";
+import Card from "../../../../components/common/Card.jsx";
 
 function BankerView() {
   const [kyc, setKyc] = React.useState({
