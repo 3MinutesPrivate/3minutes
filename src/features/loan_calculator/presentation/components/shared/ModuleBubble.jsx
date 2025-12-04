@@ -4,9 +4,9 @@ import Card from "../../../../../components/common/Card.jsx";
 /**
  * ModuleBubble
  *
- * - 默认 collapsed（defaultExpanded = false）
- * - collapsed: 显示为渐变圆形/胶囊按钮（大泡泡）
- * - expanded : 显示为 Card，内部渲染 children，并在底部提供 Collapse 按钮
+ * - 默认收起（defaultExpanded = false）
+ * - 收起：圆形「大泡泡」按钮（图标在上，文字在下）
+ * - 展开：Card + children + 底部 Collapse 按钮
  */
 function ModuleBubble({
   id,
@@ -34,25 +34,28 @@ function ModuleBubble({
   };
 
   if (!expanded) {
-    // 收起状态：大泡泡按钮
+    // 收起状态：圆形泡泡
     return (
       <button
         type="button"
         onClick={open}
-        className="inline-flex items-center gap-2 rounded-full
-                   bg-gradient-to-r from-emerald-400 via-amber-400 to-violet-500
-                   px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg
-                   hover:scale-105 active:scale-95 transition-transform"
+        className="inline-flex flex-col items-center justify-center
+                   min-w-[88px] min-h-[88px]
+                   rounded-full bg-gradient-to-br
+                   from-emerald-400 via-amber-300 to-violet-500
+                   text-xs font-semibold text-slate-900 shadow-lg
+                   hover:scale-105 active:scale-95
+                   transition-transform"
         aria-expanded="false"
         aria-label={label}
         data-module-id={id}
       >
         {icon && (
-          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-900/20">
+          <span className="text-xl mb-1" aria-hidden="true">
             {icon}
           </span>
         )}
-        <span>{label}</span>
+        <span className="px-2 text-center leading-snug">{label}</span>
       </button>
     );
   }
