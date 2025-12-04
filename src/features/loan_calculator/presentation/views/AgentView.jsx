@@ -10,57 +10,86 @@ import HelperTools from "../components/agent/HelperTools.jsx";
 function AgentView() {
   const [quoteSummary, setQuoteSummary] = React.useState(null);
 
-  const agentModules = layoutConfig.lensModules?.agent || [];
-  const cfg = agentModules
-    .filter((m) => m.enabled !== false)
-    .sort((a, b) => (a.order || 0) - (b.order || 0))
-    .find((m) => m.id === "agent-tools");
+  const agentModules = (layoutConfig.lensModules?.agent || []).filter(
+    (m) => m.enabled !== false
+  );
+  const sortedModules = [...agentModules].sort(
+    (a, b) => (a.order || 0) - (b.order || 0)
+  );
+  const getBubbleCfg = (id) =>
+    sortedModules.find((m) => m.id === id)?.bubble || null;
 
-  if (!cfg) {
-    return null;
-  }
-
-  const bubble = cfg.bubble || {};
+  const bubbleSnap = getBubbleCfg("agent-snapquote");
+  const bubbleDsr = getBubbleCfg("agent-dsr");
+  const bubbleHelpers = getBubbleCfg("agent-helpers");
 
   return (
     <div className="space-y-4">
-      <ModuleBubble
-        id={cfg.id}
-        label={bubble.label || "Agent Tools"}
-        subtitle={
-          bubble.subtitle || "Snap Quote, DSR check, defense & helper tools."
-        }
-        icon={bubble.icon || "🧰"}
-        defaultExpanded={bubble.defaultExpanded ?? false}
-      >
-        <Card
-          title="Snap Quote"
-          subtitle="One-swipe quotation for fast closing."
+      {/* Snap Quote 泡泡 */}
+      {bubbleSnap && (
+        <ModuleBubble
+          id="agent-snapquote"
+          label={bubbleSnap.label || "Snap Quote"}
+          subtitle={
+            bubbleSnap.subtitle || "One-swipe quotation for fast closing."
+          }
+          icon={bubbleSnap.icon || "⚡"}
+          defaultExpanded={bubbleSnap.defaultExpanded ?? false}
         >
-          <SnapQuote onQuoteChange={setQuoteSummary} />
-        </Card>
+          <Card
+            title="Snap Quote"
+            subtitle="Property price, margin, rate & tenure with estimated instalment."
+          >
+            <SnapQuote onQuoteChange={setQuoteSummary} />
+          </Card>
+        </ModuleBubble>
+      )}
 
-        <Card
-          title="Traffic Light DSR Check"
-          subtitle="Quick pre-screen before submitting."
+      {/* DSR 泡泡 */}
+      {bubbleDsr && (
+        <ModuleBubble
+          id="agent-dsr"
+          label={bubbleDsr.label || "DSR Check"}
+          subtitle={bubbleDsr.subtitle || "Traffic light DSR pre-screen."}
+          icon={bubbleDsr.icon || "🚦"}
+          defaultExpanded={bubbleDsr.defaultExpanded ?? false}
         >
-          <TrafficLight linkedLoan={quoteSummary} />
-        </Card>
+          <Card
+            title="Traffic Light DSR Check"
+            subtitle="Quick pre-screen before submitting the case."
+          >
+            <TrafficLight linkedLoan={quoteSummary} />
+          </Card>
+        </ModuleBubble>
+      )}
 
-        <Card
-          title="Defense Shield"
-          subtitle="Position your project against competing launches."
+      {/* Helper Tools 泡泡（包含 DefenseShield + HelperTools） */}
+      {bubbleHelpers && (
+        <ModuleBubble
+          id="agent-helpers"
+          label={bubbleHelpers.label || "Helper Tools"}
+          subtitle={
+            bubbleHelpers.subtitle ||
+            "Smart checklist, reverse calculator & defense points."
+          }
+          icon={bubbleHelpers.icon || "🧰"}
+          defaultExpanded={bubbleHelpers.defaultExpanded ?? false}
         >
-          <DefenseShield />
-        </Card>
+          <Card
+            title="Defense Shield"
+            subtitle="Position your project against competing launches."
+          >
+            <DefenseShield />
+          </Card>
 
-        <Card
-          title="Helper Tools"
-          subtitle="Smart checklist & reverse calculator."
-        >
-          <HelperTools />
-        </Card>
-      </ModuleBubble>
+          <Card
+            title="Smart Checklist & Reverse Calculator"
+            subtitle="Prepare documents and sense-check budget vs price."
+          >
+            <HelperTools />
+          </Card>
+        </ModuleBubble>
+      )}
     </div>
   );
 }
