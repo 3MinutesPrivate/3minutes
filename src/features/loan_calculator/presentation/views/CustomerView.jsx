@@ -15,76 +15,146 @@ function CustomerView() {
     setCalcState(state);
   };
 
-  const customerModules = layoutConfig.lensModules?.customer || [];
-  const cfg = customerModules
-    .filter((m) => m.enabled !== false)
-    .sort((a, b) => (a.order || 0) - (b.order || 0))
-    .find((m) => m.id === "cust-calculator");
+  const customerModules = (layoutConfig.lensModules?.customer || []).filter(
+    (m) => m.enabled !== false
+  );
 
-  if (!cfg) {
-    return null;
-  }
+  const sortedModules = [...customerModules].sort(
+    (a, b) => (a.order || 0) - (b.order || 0)
+  );
 
-  const bubble = cfg.bubble || {};
+  const getBubbleCfg = (id) =>
+    sortedModules.find((m) => m.id === id)?.bubble || null;
+
+  const bubbleCalc = getBubbleCfg("cust-calculator");
+  const bubbleSummary = getBubbleCfg("cust-summary");
+  const bubbleTable = getBubbleCfg("cust-table");
+  const bubbleFlexi = getBubbleCfg("cust-flexi");
 
   return (
     <div className="space-y-4">
-      <ModuleBubble
-        id={cfg.id}
-        label={bubble.label || "3M Calculator"}
-        subtitle={
-          bubble.subtitle ||
-          "Understand your home loan in 3 minutes. Simple, precise, visual."
-        }
-        icon={bubble.icon || "🧮"}
-        defaultExpanded={bubble.defaultExpanded ?? false}
-      >
-        {/* Section 1: Inputs */}
-        <Card
-          title="Base Inputs"
-          subtitle="Property, loan amount, rates and start date."
+      {/* Calculator 泡泡 */}
+      {bubbleCalc && (
+        <ModuleBubble
+          id="cust-calculator"
+          label={bubbleCalc.label || "Calculator"}
+          subtitle={
+            bubbleCalc.subtitle || "Input & configure your home financing."
+          }
+          icon={bubbleCalc.icon || "🧮"}
+          defaultExpanded={bubbleCalc.defaultExpanded ?? false}
         >
-          <InputsPanel onStateChange={handleCalcChange} />
-        </Card>
-
-        {/* Section 2: Summary */}
-        {calcState && (
           <Card
-            title="Loan Summary"
-            subtitle="Monthly repayment, total interest and payoff date."
+            title="Calculator"
+            subtitle="Property value, downpayment, loan amount, rate and tenure."
           >
-            <SummaryCards calcState={calcState} />
+            <InputsPanel onStateChange={handleCalcChange} />
           </Card>
-        )}
+        </ModuleBubble>
+      )}
 
-        {/* Section 3 & 4: Table + Charts */}
-        {calcState && (
-          <div className="grid gap-4 md:grid-cols-2">
+      {/* Summary 泡泡 */}
+      {bubbleSummary && (
+        <ModuleBubble
+          id="cust-summary"
+          label={bubbleSummary.label || "Summary"}
+          subtitle={
+            bubbleSummary.subtitle || "Key numbers and payoff date overview."
+          }
+          icon={bubbleSummary.icon || "📌"}
+          defaultExpanded={bubbleSummary.defaultExpanded ?? false}
+        >
+          {calcState ? (
             <Card
-              title="Amortization Table"
-              subtitle="Monthly/annual breakdown of your loan."
+              title="Loan Summary"
+              subtitle="Monthly repayment, total interest and payoff date."
             >
-              <AmortizationTable calcState={calcState} />
+              <SummaryCards calcState={calcState} />
             </Card>
+          ) : (
             <Card
-              title="Visual Breakdown"
-              subtitle="Outstanding balance vs cumulative interest."
+              title="Loan Summary"
+              subtitle="Run the calculator bubble first to see the summary."
             >
-              <ChartsPanel calcState={calcState} />
+              <p className="text-xs text-slate-400">
+                Please fill in the Calculator bubble before viewing the
+                summary.
+              </p>
             </Card>
-          </div>
-        )}
+          )}
+        </ModuleBubble>
+      )}
 
-        {/* Section 5: Flexi Simulator */}
-        {calcState && (
-          <Card
-            title="Flexi Simulator"
-            subtitle="See how flexi structure reduces interest."
-          >
-            <FlexiSimulator baseCalcState={calcState} />
-          </Card>
-        )}
-      </ModuleBubble>
+      {/* Table 泡泡（表 + 图可放一起） */}
+      {bubbleTable && (
+        <ModuleBubble
+          id="cust-table"
+          label={bubbleTable.label || "Table"}
+          subtitle={bubbleTable.subtitle || "Monthly & annual breakdown."}
+          icon={bubbleTable.icon || "📑"}
+          defaultExpanded={bubbleTable.defaultExpanded ?? false}
+        >
+          {calcState ? (
+            <div className="grid gap-4 md:grid-cols-2">
+              <Card
+                title="Amortization Table"
+                subtitle="Payment, principal, interest and balance."
+              >
+                <AmortizationTable calcState={calcState} />
+              </Card>
+              <Card
+                title="Visual Breakdown"
+                subtitle="Outstanding balance vs cumulative interest."
+              >
+                <ChartsPanel calcState={calcState} />
+              </Card>
+            </div>
+          ) : (
+            <Card
+              title="Amortization & Charts"
+              subtitle="Run the calculator bubble first to see the breakdown."
+            >
+              <p className="text-xs text-slate-400">
+                Please fill in the Calculator bubble before viewing tables and
+                charts.
+              </p>
+            </Card>
+          )}
+        </ModuleBubble>
+      )}
+
+      {/* Simulator 泡泡 */}
+      {bubbleFlexi && (
+        <ModuleBubble
+          id="cust-flexi"
+          label={bubbleFlexi.label || "Simulator"}
+          subtitle={
+            bubbleFlexi.subtitle ||
+            "See how flexi structure and advance payments save interest."
+          }
+          icon={bubbleFlexi.icon || "📈"}
+          defaultExpanded={bubbleFlexi.defaultExpanded ?? false}
+        >
+          {calcState ? (
+            <Card
+              title="Flexi Simulator"
+              subtitle="Visualise interest savings with flexi structures."
+            >
+              <FlexiSimulator baseCalcState={calcState} />
+            </Card>
+          ) : (
+            <Card
+              title="Flexi Simulator"
+              subtitle="Run the calculator bubble first to set a base loan."
+            >
+              <p className="text-xs text-slate-400">
+                Please fill in the Calculator bubble before running the flexi
+                simulation.
+              </p>
+            </Card>
+          )}
+        </ModuleBubble>
+      )}
     </div>
   );
 }
