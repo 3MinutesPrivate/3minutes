@@ -8,12 +8,12 @@ const MODES = [
 ];
 
 /**
- * 顶部模式切换器，用于显示当前 Lens，并允许用户切换。
+ * 顶部模式指示器（只负责显示当前 Lens，不再可点击切换）
  * - 当前模式按钮“亮灯”：绿色背景 + 小灯泡图标
- * - 点击会更新 AppContext.mode，UnifiedCalculator 会同步 activeLens
+ * - 真正的切换由右下角 FAB 完成（UnifiedCalculator 会同步 mode）
  */
 function PerspectiveSwitcher() {
-  const { mode, setMode } = useAppContext();
+  const { mode } = useAppContext();
 
   return (
     <div className="inline-flex items-center rounded-full border border-slate-700/80 bg-slate-900/80 p-0.5 text-[11px]">
@@ -23,11 +23,11 @@ function PerspectiveSwitcher() {
           <button
             key={m.id}
             type="button"
-            onClick={() => setMode(m.id)}
+            disabled
             className={`mx-0.5 rounded-full px-2.5 py-1 flex items-center gap-1 transition ${
               active
                 ? "bg-emerald-500 text-slate-900 shadow-sm"
-                : "text-slate-300 hover:bg-slate-800/80 hover:text-slate-50"
+                : "text-slate-300"
             }`}
           >
             {active && (
