@@ -4,16 +4,15 @@ import { ROLES } from "../../features/loan_calculator/logic/roles.js";
 import Card from "../../components/common/Card.jsx";
 import NumberInput from "../../components/common/NumberInput.jsx";
 
-// 邀请码常量：正式环境你可以自己换成更复杂的
 const INVITE_CODES = {
   [ROLES.AGENT]: "BANKER_GENERATED_CODE",
   [ROLES.BANKER]: "BOSS_GENERATED_CODE",
-  [ROLES.BOSS]: "3M_SUPER_BOSS", // Boss 专用 master code
+  [ROLES.BOSS]: "3M_SUPER_BOSS",
 };
 
 function LoginScreen() {
   const { register } = useAuthStore();
-  const [mode, setMode] = useState("register"); // 预留 login/register 切换
+  const [mode] = useState("register");
   const [role, setRole] = useState(ROLES.CUSTOMER);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -94,7 +93,7 @@ function LoginScreen() {
           onSubmit={handleSubmit}
           className="px-4 pb-4 pt-2 space-y-3"
         >
-          {/* Role 切换 */}
+          {/* Role 选择（含 Boss） */}
           <div className="flex items-center justify-between gap-2 text-[11px]">
             <span className="text-slate-300 font-semibold">
               I am logging in as:
