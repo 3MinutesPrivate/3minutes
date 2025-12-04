@@ -1,0 +1,88 @@
+{
+  "version": "1.0",
+  "lensModules": {
+    "customer": [
+      {
+        "id": "cust-calculator",
+        "enabled": true,
+        "order": 1,
+        "bubble": {
+          "label": "3M Calculator",
+          "icon": "🧮",
+          "subtitle": "Understand your home loan in 3 minutes.",
+          "defaultExpanded": false
+        }
+      }
+    ],
+    "agent": [
+      {
+        "id": "agent-tools",
+        "enabled": true,
+        "order": 1,
+        "bubble": {
+          "label": "Agent Tools",
+          "icon": "🧰",
+          "subtitle": "Snap Quote, DSR & Helper tools.",
+          "defaultExpanded": false
+        }
+      }
+    ],
+    "banker": [
+      {
+        "id": "banker-kyc",
+        "enabled": true,
+        "order": 1,
+        "bubble": {
+          "label": "KYC",
+          "icon": "🧾",
+          "subtitle": "Age, family & residency profile.",
+          "defaultExpanded": false
+        }
+      },
+      {
+        "id": "banker-income",
+        "enabled": true,
+        "order": 2,
+        "bubble": {
+          "label": "Income Engine",
+          "icon": "📊",
+          "subtitle": "Income recognition matrix.",
+          "defaultExpanded": false
+        }
+      },
+      {
+        "id": "banker-commit",
+        "enabled": true,
+        "order": 3,
+        "bubble": {
+          "label": "Commitment Stack",
+          "icon": "📚",
+          "subtitle": "All debts, DSR & NDI.",
+          "defaultExpanded": false
+        }
+      },
+      {
+        "id": "banker-handbook",
+        "enabled": true,
+        "order": 4,
+        "bubble": {
+          "label": "Handbook",
+          "icon": "⚙️",
+          "subtitle": "Parameters & bank strategies.",
+          "defaultExpanded": false
+        }
+      },
+      {
+        "id": "banker-sim",
+        "enabled": true,
+        "order": 5,
+        "bubble": {
+          "label": "Rescue Engine",
+          "icon": "🩺",
+          "subtitle": "Simulation & mitigation.",
+          "defaultExpanded": false
+        }
+      }
+    ]
+  }
+}
