@@ -20,19 +20,19 @@ function BankerView() {
   const [incomeSummary, setIncomeSummary] = React.useState(null);
   const [commitmentResult, setCommitmentResult] = React.useState(null);
 
-  const bankerModules = layoutConfig.lensModules?.banker || [];
-  const enabledBankerModules = bankerModules
-    .filter((m) => m.enabled !== false)
-    .sort((a, b) => (a.order || 0) - (b.order || 0));
+  const bankerModules = (layoutConfig.lensModules?.banker || []).filter(
+    (m) => m.enabled !== false
+  );
+  const sortedModules = [...bankerModules].sort(
+    (a, b) => (a.order || 0) - (b.order || 0)
+  );
+  const getCfg = (id) => sortedModules.find((m) => m.id === id) || null;
 
-  const findCfg = (id) =>
-    enabledBankerModules.find((m) => m.id === id) || null;
-
-  const cfgKyc = findCfg("banker-kyc");
-  const cfgIncome = findCfg("banker-income");
-  const cfgCommit = findCfg("banker-commit");
-  const cfgHandbook = findCfg("banker-handbook");
-  const cfgSim = findCfg("banker-sim");
+  const cfgKyc = getCfg("banker-kyc");
+  const cfgIncome = getCfg("banker-income");
+  const cfgCommit = getCfg("banker-commit");
+  const cfgHandbook = getCfg("banker-handbook");
+  const cfgSim = getCfg("banker-sim");
 
   return (
     <WatermarkOverlay>
@@ -125,7 +125,7 @@ function BankerView() {
             icon={cfgSim.bubble?.icon || "🩺"}
             defaultExpanded={cfgSim.bubble?.defaultExpanded ?? false}
           >
-            {/* SimulationMitigation 自己根据 status (GREEN/YELLOW/RED/FAIL_COST) 决定是否显示内容 */}
+            {/* SimulationMitigation 内部根据 status 判定是否有内容 */}
             <SimulationMitigation
               incomeSummary={incomeSummary}
               commitmentResult={commitmentResult}
