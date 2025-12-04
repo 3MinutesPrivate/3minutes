@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuthStore } from "./authStore.js";
+import { useAuthStore } from "./authStore";
 import { ROLES } from "../../features/loan_calculator/logic/roles.js";
 import Card from "../../components/common/Card.jsx";
 import NumberInput from "../../components/common/NumberInput.jsx";
