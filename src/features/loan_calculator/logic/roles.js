@@ -1,13 +1,12 @@
 // Role & Lens definitions for 3Minutes Loan Calculator
-// This module is pure logic (no React). It can be safely shared across
-// platform/auth, platform/layout and feature presentation layers.
+// 纯逻辑模块，无 React 依赖，可被 platform/auth、layout、feature 等多处复用。
 
 /**
- * Application-level roles
- * - CUSTOMER: end-buyer
- * - AGENT: property agent
- * - BANKER: banker / senior credit officer
- * - BOSS: superuser / owner (can see everything)
+ * 应用级角色
+ * - CUSTOMER: 终端购房者
+ * - AGENT   : 房产代理
+ * - BANKER  : 银行职员 / 信贷官
+ * - BOSS    : 超级用户（拥有全部权限）
  */
 export const ROLES = {
   CUSTOMER: "customer",
@@ -17,8 +16,7 @@ export const ROLES = {
 };
 
 /**
- * Visual lenses for the calculator.
- * These map 1:1 to the three business perspectives.
+ * 贷款计算器的三种视角透镜（UI 视图）
  */
 export const LENSES = {
   CUSTOMER: "customer",
@@ -27,15 +25,15 @@ export const LENSES = {
 };
 
 /**
- * For each role, define:
- * - defaultLens: which view they land on by default
- * - allowedLenses: which lenses they can actively switch to
+ * 对每种角色定义：
+ * - defaultLens   : 默认打开的视角
+ * - allowedLenses : 可切换到的视角列表
  *
- * Rules:
- *  - Customer: only Customer lens, no switching controls.
- *  - Agent   : default Agent, can see Agent + Customer lenses.
- *  - Banker  : default Banker, can see all three lenses.
- *  - Boss    : behaves like Banker but semantically "superuser".
+ * 规则：
+ *  - Customer 只能看 Customer 视角，不能切换
+ *  - Agent    默认 Agent，可切 Customer
+ *  - Banker   默认 Banker，可切 Banker/Agent/Customer
+ *  - Boss     等同 Banker，但语义为“老板”
  */
 export const ROLE_LENS_MAP = {
   [ROLES.CUSTOMER]: {
@@ -57,11 +55,7 @@ export const ROLE_LENS_MAP = {
 };
 
 /**
- * Normalise incoming role string to a known ROLES constant.
- * Falls back to CUSTOMER if unknown.
- *
- * @param {string} rawRole
- * @returns {string} normalised role id
+ * 归一化 role 字符串到 ROLES 常量；未知值一律当作 customer。
  */
 export function normalizeRole(rawRole) {
   const value = (rawRole || "").toLowerCase();
@@ -79,11 +73,7 @@ export function normalizeRole(rawRole) {
 }
 
 /**
- * Get role configuration (defaultLens + allowedLenses).
- * If role is unknown, returns CUSTOMER config.
- *
- * @param {string} role
- * @returns {{ defaultLens: string, allowedLenses: string[] }}
+ * 获取某个角色的配置（defaultLens + allowedLenses）
  */
 export function getRoleConfig(role) {
   const normalised = normalizeRole(role);
@@ -91,31 +81,21 @@ export function getRoleConfig(role) {
 }
 
 /**
- * Get default lens for a given role.
- *
- * @param {string} role
- * @returns {string} lens id
+ * 获取某个角色的默认视角
  */
 export function getDefaultLensForRole(role) {
   return getRoleConfig(role).defaultLens;
 }
 
 /**
- * List of allowed lenses for a given role.
- *
- * @param {string} role
- * @returns {string[]} array of lens ids
+ * 获取某个角色允许的视角列表
  */
 export function getAllowedLensesForRole(role) {
   return getRoleConfig(role).allowedLenses;
 }
 
 /**
- * Check whether a lens is allowed for this role.
- *
- * @param {string} role
- * @param {string} lens
- * @returns {boolean}
+ * 判断某个 lens 对该角色是否可用
  */
 export function isLensAllowedForRole(role, lens) {
   const lenses = getAllowedLensesForRole(role);
