@@ -1,5 +1,5 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "lensModules": {
     "customer": [
       {
@@ -7,22 +7,77 @@
         "enabled": true,
         "order": 1,
         "bubble": {
-          "label": "3M Calculator",
+          "label": "Calculator",
           "icon": "🧮",
-          "subtitle": "Understand your home loan in 3 minutes.",
+          "subtitle": "Input & configure your loan.",
+          "defaultExpanded": false
+        }
+      },
+      {
+        "id": "cust-summary",
+        "enabled": true,
+        "order": 2,
+        "bubble": {
+          "label": "Summary",
+          "icon": "📌",
+          "subtitle": "Key figures & payoff date.",
+          "defaultExpanded": false
+        }
+      },
+      {
+        "id": "cust-table",
+        "enabled": true,
+        "order": 3,
+        "bubble": {
+          "label": "Table",
+          "icon": "📑",
+          "subtitle": "Monthly & annual breakdown.",
+          "defaultExpanded": false
+        }
+      },
+      {
+        "id": "cust-flexi",
+        "enabled": true,
+        "order": 4,
+        "bubble": {
+          "label": "Simulator",
+          "icon": "📈",
+          "subtitle": "Flexi structure savings.",
           "defaultExpanded": false
         }
       }
     ],
     "agent": [
       {
-        "id": "agent-tools",
+        "id": "agent-snapquote",
         "enabled": true,
         "order": 1,
         "bubble": {
-          "label": "Agent Tools",
+          "label": "Snap Quote",
+          "icon": "⚡",
+          "subtitle": "Fast quotation & cashback.",
+          "defaultExpanded": false
+        }
+      },
+      {
+        "id": "agent-dsr",
+        "enabled": true,
+        "order": 2,
+        "bubble": {
+          "label": "DSR Check",
+          "icon": "🚦",
+          "subtitle": "Traffic light pre-screen.",
+          "defaultExpanded": false
+        }
+      },
+      {
+        "id": "agent-helpers",
+        "enabled": true,
+        "order": 3,
+        "bubble": {
+          "label": "Helper Tools",
           "icon": "🧰",
-          "subtitle": "Snap Quote, DSR & Helper tools.",
+          "subtitle": "Checklist, reverse calc & defense.",
           "defaultExpanded": false
         }
       }
